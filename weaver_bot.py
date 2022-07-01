@@ -8,6 +8,8 @@ with open('4letterwords_official.txt') as file:
 for l in lines:
     AllWords.append(l[:4])
 
+
+# returns # of letters in common for 4 letter words
 def lets_in_common(string_a, string_b):
     if len(string_a) != 4 or len(string_b) != 4:
         return 0
@@ -19,6 +21,7 @@ def lets_in_common(string_a, string_b):
             score += 1
     return score
 
+# returns array of all words 1 letter swap away from current_word
 def next_words(current_word):
     result = []
     for w in AllWords:
@@ -26,32 +29,39 @@ def next_words(current_word):
             result.append(w)
     return result
 
+# returns 'graph' dictionary. <key,val> = <word,[neighbours]>
 def generate_graph():
     word_graph = {}
     for current_word in AllWords:
         word_graph[current_word] = next_words(current_word)
         print("'{}': {},".format(current_word,word_graph[current_word]))
+    return word_graph
 
-
-def search(root, goal):
+# bfs search over word list
+def bfs_search(start, goal):
+    #initialize queue and vars
     q = Queue(maxsize = len(AllWords))
+    start = start.upper()
+    goal = goal.upper()
     visited = {}
-    visited[root] = ""
-    q.put(root)
+    visited[start] = ""
+    q.put(start)
+
+    #loop over queue, adding all connected words to back of queue
     while not q.empty():
         current_word = q.get()
         if current_word == goal:
-##            return visited
-            print(current_word)
-            return
+            return visited
         for word in next_words(current_word):
             if not word in visited:
-                # labels words with their path
+                #labels words with their 'parent' node to preserve path
                 visited[word] = current_word
                 q.put(word)
 
-def finish(root, goal):
-    visited = search(root, goal)
+def do_weaver(start, goal):
+    start = start.upper()
+    goal = goal.upper()
+    visited = bfs_search(start, goal)
     path = [goal]
     current = visited[goal]
     while True:
@@ -60,7 +70,7 @@ def finish(root, goal):
             current = visited[current]
         else:
             break
-    print(path)
+    print(path[::-1])
         
     
 
