@@ -52,7 +52,7 @@ def bfs_search(start, goal):
         current_word = q.get()
         if current_word == goal:
             return visited
-        for word in next_words(current_word):
+        for word in weaver_vars.word_graph[current_word]:
             if not word in visited:
                 #labels words with their 'parent' node to preserve path
                 visited[word] = current_word
@@ -63,14 +63,16 @@ def do_weaver(start, goal):
     goal = goal.upper()
     visited = bfs_search(start, goal)
     path = [goal]
-    current = visited[goal]
-    while True:
-        if not current == "":
-            path.append(current)
-            current = visited[current]
-        else:
-            break
-    print(path[::-1])
-        
+    try:
+        current = visited[goal]
+        while True:
+            if not current == "":
+                path.append(current)
+                current = visited[current]
+            else:
+                break
+        print(path[::-1])
+    except:
+        print("No path found")
     
 
