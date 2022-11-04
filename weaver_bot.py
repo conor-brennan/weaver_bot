@@ -71,8 +71,15 @@ def do_weaver(start, goal):
                 current = visited[current]
             else:
                 break
-        print(path[::-1])
+        return path[::-1]
     except:
         print("No path found")
+        return []
     
-
+def path_compare(word1, word2):
+    path1_2 = do_weaver(word1,word2)
+    path2_1 = do_weaver(word2,word1)
+    if path1_2 == path2_1[::-1]:
+        print("Same path: {}".format(path2_1))
+    else:
+        print("Different paths: {}\n\t\t{}".format(path1_2,path2_1[::-1]))
